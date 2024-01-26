@@ -1,0 +1,5 @@
+pip install gspread
+
+Guia de inicio para uso da API:
+https://developers.google.com/sheets/api/quickstart/python?hl=pt-br
+
