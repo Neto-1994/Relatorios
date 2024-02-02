@@ -11,31 +11,31 @@ class Trans_MM():
     def main(self, Planilha, data1, data2, mes, ano):
         def obter_valores():
             # Lista com os codigos
-            codigos = [1231, 1232, 1243, 1245, 1244, 1247, 1246, 1222, 1221, 1226, 1227, 1228, 1229, 1230]
+            codigos = [1243, 1245, 1244, 1247, 1246, 1222, 1221, 1226, 1227, 1228, 1229, 1230, 1231, 1232]
             # Listas para adicionar os dados
             valores = []
             resultado = []
             # Abre conexao com o banco de dados
             cursor = obter_conexao().cursor()
             # Execucao da query para todos os codigos registrados
-            consulta_sql = "SELECT codigo_sec, COUNT(hora_transmissao) FROM mensagens WHERE Codigo_Sec IN (1231, 1232, 1243, 1245, 1244, 1247, 1246, 1222, 1221, 1226, 1227, 1228, 1229, 1230) \
+            consulta_sql = "SELECT codigo_sec, COUNT(hora_transmissao) FROM mensagens WHERE Codigo_Sec IN (1243, 1245, 1244, 1247, 1246, 1222, 1221, 1226, 1227, 1228, 1229, 1230, 1231, 1232) \
                 AND hora_transmissao >= %s AND hora_transmissao <= %s AND status_mensagem = 'G' \
                 GROUP BY codigo_sec, DATE(hora_transmissao) \
                 ORDER BY CASE codigo_sec \
-                    WHEN 1231 THEN 1 \
-                    WHEN 1232 THEN 2 \
-                    WHEN 1243 THEN 3 \
-                    WHEN 1245 THEN 4 \
-                    WHEN 1244 THEN 5 \
-                    WHEN 1247 THEN 6 \
-                    WHEN 1246 THEN 7 \
-                    WHEN 1222 THEN 8 \
-                    WHEN 1221 THEN 9 \
-                    WHEN 1226 THEN 10 \
-                    WHEN 1227 THEN 11 \
-                    WHEN 1228 THEN 12 \
-                    WHEN 1229 THEN 13 \
-                    WHEN 1230 THEN 14 \
+                    WHEN 1243 THEN 1 \
+                    WHEN 1245 THEN 2 \
+                    WHEN 1244 THEN 3 \
+                    WHEN 1247 THEN 4 \
+                    WHEN 1246 THEN 5 \
+                    WHEN 1222 THEN 6 \
+                    WHEN 1221 THEN 7 \
+                    WHEN 1226 THEN 8 \
+                    WHEN 1227 THEN 9 \
+                    WHEN 1228 THEN 10 \
+                    WHEN 1229 THEN 11 \
+                    WHEN 1230 THEN 12 \
+                    WHEN 1231 THEN 13 \
+                    WHEN 1232 THEN 14 \
                     END, DATE(hora_transmissao);"
             cursor.execute(consulta_sql, (data1, data2))
             # Extrai o valor da contagem dos dados de retorno
@@ -50,7 +50,7 @@ class Trans_MM():
             resultado.append(valores)
             return resultado
 
-        def registrar_valores(resultado):
+        def registrar_valores(resultado, meteorologica):
             # Parte de log da API Google Sheets
             # If modifying these scopes, delete the file token.json.
             SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
@@ -216,40 +216,40 @@ class Trans_MM():
                         .batchUpdate(spreadsheetId=Planilha, body=body)
                         .execute())
                     Posicao_dados = f"Transmissoes {ano}01!B5"
-                    Posicao_mes = f"Transmissoes {ano}!B5"
+                    Posicao_dados_meteorologica = f"Transmissoes {ano}01!B19"
                 elif mes == 2:
                     Posicao_dados = f"Transmissoes {ano}02!B5"
-                    Posicao_mes = f"Transmissoes {ano}!C5"
+                    Posicao_dados_meteorologica = f"Transmissoes {ano}02!B19"
                 elif mes == 3:
                     Posicao_dados = f"Transmissoes {ano}03!B5"
-                    Posicao_mes = f"Transmissoes {ano}!D5"
+                    Posicao_dados_meteorologica = f"Transmissoes {ano}03!B19"
                 elif mes == 4:
                     Posicao_dados = f"Transmissoes {ano}04!B5"
-                    Posicao_mes = f"Transmissoes {ano}!E5"
+                    Posicao_dados_meteorologica = f"Transmissoes {ano}04!B19"
                 elif mes == 5:
                     Posicao_dados = f"Transmissoes {ano}05!B5"
-                    Posicao_mes = f"Transmissoes {ano}!F5"
+                    Posicao_dados_meteorologica = f"Transmissoes {ano}05!B19"
                 elif mes == 6:
                     Posicao_dados = f"Transmissoes {ano}06!B5"
-                    Posicao_mes = f"Transmissoes {ano}!G5"
+                    Posicao_dados_meteorologica = f"Transmissoes {ano}06!B19"
                 elif mes == 7:
                     Posicao_dados = f"Transmissoes {ano}07!B5"
-                    Posicao_mes = f"Transmissoes {ano}!H5"
+                    Posicao_dados_meteorologica = f"Transmissoes {ano}07!B19"
                 elif mes == 8:
                     Posicao_dados = f"Transmissoes {ano}08!B5"
-                    Posicao_mes = f"Transmissoes {ano}!I5"
+                    Posicao_dados_meteorologica = f"Transmissoes {ano}08!B19"
                 elif mes == 9:
                     Posicao_dados = f"Transmissoes {ano}09!B5"
-                    Posicao_mes = f"Transmissoes {ano}!J5"
+                    Posicao_dados_meteorologica = f"Transmissoes {ano}09!B19"
                 elif mes == 10:
                     Posicao_dados = f"Transmissoes {ano}10!B5"
-                    Posicao_mes = f"Transmissoes {ano}!K5"
+                    Posicao_dados_meteorologica = f"Transmissoes {ano}10!B19"
                 elif mes == 11:
                     Posicao_dados = f"Transmissoes {ano}11!B5"
-                    Posicao_mes = f"Transmissoes {ano}!L5"
+                    Posicao_dados_meteorologica = f"Transmissoes {ano}11!B19"
                 elif mes == 12:
                     Posicao_dados = f"Transmissoes {ano}12!B5"
-                    Posicao_mes = f"Transmissoes {ano}!M5"
+                    Posicao_dados_meteorologica = f"Transmissoes {ano}12!B19"
                 # Chamada da API de Planilhas
                 sheet = service.spreadsheets()
                 # Escrever dados em uma planilha
@@ -257,9 +257,16 @@ class Trans_MM():
                     sheet.values()
                     .update(spreadsheetId=Planilha, range=Posicao_dados, valueInputOption="USER_ENTERED", body={"values": resultado})
                     .execute())
+                result = (
+                    sheet.values()
+                    .update(spreadsheetId=Planilha, range=Posicao_dados_meteorologica, valueInputOption="USER_ENTERED", body={"values": meteorologica})
+                    .execute())
             except HttpError as err:
                 print(err)
         # Função de busca no banco
         resultado = obter_valores()
+        meteorologica = resultado[-2:]
+        resultado = resultado[:-2]
         # Função de registro na planilha
-        registrar_valores(resultado)
+        registrar_valores(resultado, meteorologica)
+

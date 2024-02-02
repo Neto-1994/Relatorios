@@ -18,16 +18,15 @@ class Trans_UHSA():
             # Abre conexao com o banco de dados
             cursor = obter_conexao().cursor()
             # Execucao da query para todos os codigos registrados
-            consulta_sql = "SELECT codigo_sec, COUNT(hora_transmissao) FROM mensagens WHERE Codigo_Sec IN (1208, 1210, 1203, 1202, 1206, 1205) \
+            consulta_sql = "SELECT codigo_sec, COUNT(hora_transmissao) FROM mensagens WHERE Codigo_Sec IN (1208 1203, 1202, 1206, 1205) \
                 AND hora_transmissao >= %s AND hora_transmissao <= %s AND status_mensagem = 'G' \
                 GROUP BY codigo_sec, DATE(hora_transmissao) \
                     ORDER BY CASE codigo_sec \
                     WHEN 1208 THEN 1 \
-                    WHEN 1210 THEN 2 \
-                    WHEN 1203 THEN 3 \
-                    WHEN 1202 THEN 4 \
-                    WHEN 1206 THEN 5 \
-                    WHEN 1205 THEN 6 \
+                    WHEN 1203 THEN 2 \
+                    WHEN 1202 THEN 3 \
+                    WHEN 1206 THEN 4 \
+                    WHEN 1205 THEN 5 \
                     END, DATE(hora_transmissao);"
             cursor.execute(consulta_sql, (data1, data2))
             # Extrai o valor da contagem dos dados de retorno

@@ -8,47 +8,38 @@ from Conexao import obter_conexao
 
 
 class Disp_MM():
-    def main(self, Planilha, data1, data2, dias, mes, ano):
+    def main(self, Planilha, data1, data2, mes, ano):
         def obter_valores():
             # Listas para adicionar os dados
             valores = []
-            resultado = []
             # Abre conexao com o banco de dados
             cursor = obter_conexao().cursor()
             # Execucao da query para todos os codigos registrados
-            consulta_sql = "SELECT Codigo_Sec, COUNT(Dt_Medicao) FROM medicoes WHERE Codigo_Sec IN (1231, 1232, 1243, 1245, 1244, 1247, 1246, 1222, 1221, 1226, 1227, 1228, 1229, 1230) AND Dt_Medicao >= %s AND Dt_Medicao <= %s GROUP BY Codigo_Sec \
+            consulta_sql = "SELECT COUNT(Dt_Medicao) FROM medicoes WHERE Codigo_Sec IN (1243, 1245, 1244, 1247, 1246, 1222, 1221, 1226, 1227, 1228, 1229, 1230, 1231, 1232) AND Dt_Medicao >= %s AND Dt_Medicao <= %s GROUP BY Codigo_Sec \
                 ORDER BY CASE Codigo_Sec \
-                    WHEN 1231 THEN 1 \
-                    WHEN 1232 THEN 2 \
-                    WHEN 1243 THEN 3 \
-                    WHEN 1245 THEN 4 \
-                    WHEN 1244 THEN 5 \
-                    WHEN 1247 THEN 6 \
-                    WHEN 1246 THEN 7 \
-                    WHEN 1222 THEN 8 \
-                    WHEN 1221 THEN 9 \
-                    WHEN 1226 THEN 10 \
-                    WHEN 1227 THEN 11 \
-                    WHEN 1228 THEN 12 \
-                    WHEN 1229 THEN 13 \
-                    WHEN 1230 THEN 14 \
+                    WHEN 1243 THEN 1 \
+                    WHEN 1245 THEN 2 \
+                    WHEN 1244 THEN 3 \
+                    WHEN 1247 THEN 4 \
+                    WHEN 1246 THEN 5 \
+                    WHEN 1222 THEN 6 \
+                    WHEN 1221 THEN 7 \
+                    WHEN 1226 THEN 8 \
+                    WHEN 1227 THEN 9 \
+                    WHEN 1228 THEN 10 \
+                    WHEN 1229 THEN 11 \
+                    WHEN 1230 THEN 12 \
+                    WHEN 1231 THEN 13 \
+                    WHEN 1232 THEN 14 \
                     END;"
             cursor.execute(consulta_sql, (data1, data2))
             # Extrai o valor da contagem dos dados de retorno
             for dados in cursor:
                 d = [dado for dado in dados]
                 valores.append(d)
-            # Extrair os dados da tupla retornada e realizar calculos
-            for lista in valores:
-                v1 = int(lista[1])
-                if lista[0] == 1231 or lista[0] == 1232:
-                    v = round(v1 / (24 * dias), 2)
-                else:
-                    v = round(v1 / (24 * 4 * dias), 2)
-                resultado.append([v1, v])
-            return resultado
+            return valores
 
-        def registrar_valores(resultado):
+        def registrar_valores(valores, meteorologica):
             # Parte de log da API Google Sheets
             # If modifying these scopes, delete the file token.json.
             SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
@@ -214,37 +205,56 @@ class Disp_MM():
                         .batchUpdate(spreadsheetId=Planilha, body=body)
                         .execute())
                     Posicao_Escrever = f"Disponibilidade {ano}01!B5"
+                    Posicao_dados_meteorologica = f"Disponibilidade {ano}01!G5"
                 elif mes == 2:
                     Posicao_Escrever = f"Disponibilidade {ano}02!B5"
+                    Posicao_dados_meteorologica = f"Disponibilidade {ano}02!G5"
                 elif mes == 3:
                     Posicao_Escrever = f"Disponibilidade {ano}03!B5"
+                    Posicao_dados_meteorologica = f"Disponibilidade {ano}03!G5"
                 elif mes == 4:
                     Posicao_Escrever = f"Disponibilidade {ano}04!B5"
+                    Posicao_dados_meteorologica = f"Disponibilidade {ano}04!G5"
                 elif mes == 5:
                     Posicao_Escrever = f"Disponibilidade {ano}05!B5"
+                    Posicao_dados_meteorologica = f"Disponibilidade {ano}05!G5"
                 elif mes == 6:
                     Posicao_Escrever = f"Disponibilidade {ano}06!B5"
+                    Posicao_dados_meteorologica = f"Disponibilidade {ano}06!G5"
                 elif mes == 7:
                     Posicao_Escrever = f"Disponibilidade {ano}07!B5"
+                    Posicao_dados_meteorologica = f"Disponibilidade {ano}07!G5"
                 elif mes == 8:
                     Posicao_Escrever = f"Disponibilidade {ano}08!B5"
+                    Posicao_dados_meteorologica = f"Disponibilidade {ano}08!G5"
                 elif mes == 9:
                     Posicao_Escrever = f"Disponibilidade {ano}09!B5"
+                    Posicao_dados_meteorologica = f"Disponibilidade {ano}09!G5"
                 elif mes == 10:
                     Posicao_Escrever = f"Disponibilidade {ano}10!B5"
+                    Posicao_dados_meteorologica = f"Disponibilidade {ano}10!G5"
                 elif mes == 11:
                     Posicao_Escrever = f"Disponibilidade {ano}11!B5"
+                    Posicao_dados_meteorologica = f"Disponibilidade {ano}11!G5"
                 elif mes == 12:
                     Posicao_Escrever = f"Disponibilidade {ano}12!B5"
+                    Posicao_dados_meteorologica = f"Disponibilidade {ano}12!G5"
                 # Chamada da API de Planilhas
                 sheet = service.spreadsheets()
                 # Executa atualização dos dados na planilha
                 result = (
                     sheet.values()
-                    .update(spreadsheetId=Planilha, range=Posicao_Escrever, valueInputOption="USER_ENTERED", body={"values": resultado})
+                    .update(spreadsheetId=Planilha, range=Posicao_Escrever, valueInputOption="USER_ENTERED", body={"values": valores})
+                    .execute())
+                result = (
+                    sheet.values()
+                    .update(spreadsheetId=Planilha, range=Posicao_dados_meteorologica, valueInputOption="USER_ENTERED", body={"values": meteorologica})
                     .execute())
             except HttpError as err:
                 print(err)
         # Funções
-        resultado = obter_valores()
-        registrar_valores(resultado)
+        valores = obter_valores()
+        meteorologica = valores[-2:]
+        valores = valores[:-2]
+        registrar_valores(valores, meteorologica)
+

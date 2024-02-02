@@ -12,11 +12,10 @@ class Envios_UHCB():
         def obter_valores():
             # Listas para adicionar os dados
             valores = []
-            resultado = []
             # Abre conexao com o banco de dados
             cursor = obter_conexao().cursor()
             # Execucao da query para todos os codigos registrados
-            consulta_sql = "SELECT codigo_sec, COUNT(*) FROM log_ANA WHERE Codigo_Sec IN (1207, 1200, 1201, 1204) \
+            consulta_sql = "SELECT COUNT(*) FROM log_ANA WHERE Codigo_Sec IN (1207, 1200, 1201, 1204) \
                 AND dt_medicao >= %s AND dt_medicao <= %s AND (TIMESTAMPDIFF(MINUTE, DATE_SUB(dt_medicao, INTERVAL 3 HOUR), dt_transmissao)) <= 180 \
                 GROUP BY Codigo_Sec \
                     ORDER BY CASE Codigo_Sec \
@@ -30,19 +29,9 @@ class Envios_UHCB():
             for dados in cursor:
                 d = [dado for dado in dados]
                 valores.append(d)
-            # Extrair os dados da tupla retornada e realizar calculos
-            for lista in valores:
-                if lista[0] == 1207:
-                    v1 = int(lista[1])
-                    v = round(v1 / (24 * dias), 2)
-                    resultado.append([v1, v])
-                else:
-                    v1 = int(lista[1])
-                    v = round(v1 / (24 * 4 * dias), 2)
-                    resultado.append([v1, v])
-            return resultado
+            return valores
 
-        def registrar_valores(resultado):
+        def registrar_valores(valores):
             # Parte de log da API Google Sheets
             # If modifying these scopes, delete the file token.json.
             SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
@@ -235,10 +224,10 @@ class Envios_UHCB():
                 # Executa atualização dos dados na planilha
                 result = (
                     sheet.values()
-                    .update(spreadsheetId=Planilha, range=Posicao_Escrever, valueInputOption="USER_ENTERED", body={"values": resultado})
+                    .update(spreadsheetId=Planilha, range=Posicao_Escrever, valueInputOption="USER_ENTERED", body={"values": valores})
                     .execute())
             except HttpError as err:
                 print(err)
         # Funções
-        resultado = obter_valores()
-        registrar_valores(resultado)
+        valores = obter_valores()
+        registrar_valores(valores)

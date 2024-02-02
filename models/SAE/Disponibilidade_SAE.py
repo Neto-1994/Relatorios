@@ -8,11 +8,10 @@ from Conexao import obter_conexao
 
 
 class Disp_SAE():
-    def main(self, Planilha, data1, data2, dias, mes, ano):
+    def main(self, Planilha, data1, data2, mes, ano):
         def obter_valores():
             # Listas para adicionar os dados
             valores = []
-            resultado = []
             # Abre conexao com o banco de dados
             cursor = obter_conexao().cursor()
             # Execucao da query para todos os codigos registrados
@@ -26,15 +25,9 @@ class Disp_SAE():
             for dados in cursor:
                 d = [dado for dado in dados]
                 valores.append(d)
-            # Extrair os dados da tupla retornada e realizar calculos
-            for lista in valores:
-                for valor in lista:
-                    v1 = int(valor)
-                    v = round(v1 / (24 * dias), 2)
-                resultado.append([v1, v])
-            return resultado
+            return valores
 
-        def registrar_valores(resultado):
+        def registrar_valores(valores):
             # Parte de log da API Google Sheets
             # If modifying these scopes, delete the file token.json.
             SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
@@ -227,10 +220,10 @@ class Disp_SAE():
                 # Executa atualização dos dados na planilha
                 result = (
                     sheet.values()
-                    .update(spreadsheetId=Planilha, range=Posicao_Escrever, valueInputOption="USER_ENTERED", body={"values": resultado})
+                    .update(spreadsheetId=Planilha, range=Posicao_Escrever, valueInputOption="USER_ENTERED", body={"values": valores})
                     .execute())
             except HttpError as err:
                 print(err)
         # Funções
-        resultado = obter_valores()
-        registrar_valores(resultado)
+        valores = obter_valores()
+        registrar_valores(valores)

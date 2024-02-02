@@ -8,15 +8,14 @@ from Conexao import obter_conexao
 
 
 class Disp_UHET():
-    def main(self, Planilha, data1, data2, dias, mes, ano):
+    def main(self, Planilha, data1, data2, mes, ano):
         def obter_valores():
             # Listas para adicionar os dados
             valores = []
-            resultado = []
             # Abre conexao com o banco de dados
             cursor = obter_conexao().cursor()
             # Execucao da query para todos os codigos registrados
-            consulta_sql = "SELECT COUNT(Dt_Medicao) FROM medicoes WHERE Codigo_Sec IN (813, 817, 812, 796, 808, 797, 814, 800, 799, 803, 815, 811, 801, 806, 816, 818, 805, 809, 798, 807, 804, 802) AND Dt_Medicao >= %s AND Dt_Medicao <= %s GROUP BY Codigo_Sec \
+            consulta_sql = "SELECT COUNT(Dt_Medicao) FROM medicoes WHERE Codigo_Sec IN (813, 817, 812, 796, 808, 797, 814, 800, 799, 803, 815, 811, 801, 806, 816, 818, 805, 809, 798, 807, 804, 802, 810) AND Dt_Medicao >= %s AND Dt_Medicao <= %s GROUP BY Codigo_Sec \
                 ORDER BY CASE Codigo_Sec \
                     WHEN 813 THEN 1 \
                     WHEN 817 THEN 2 \
@@ -40,21 +39,16 @@ class Disp_UHET():
                     WHEN 807 THEN 20 \
                     WHEN 804 THEN 21 \
                     WHEN 802 THEN 22 \
+                    WHEN 810 THEN 23 \
                     END;"
             cursor.execute(consulta_sql, (data1, data2))
             # Extrai o valor da contagem dos dados de retorno
             for dados in cursor:
                 d = [dado for dado in dados]
                 valores.append(d)
-            # Extrair os dados da tupla retornada e realizar calculos
-            for lista in valores:
-                for valor in lista:
-                    v1 = int(valor)
-                    v = round(v1 / (24 * 4 * dias), 2)
-                resultado.append([v1, v])
-            return resultado
+            return valores
 
-        def registrar_valores(resultado):
+        def registrar_valores(valores, meteorologica):
             # Parte de log da API Google Sheets
             # If modifying these scopes, delete the file token.json.
             SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
@@ -220,37 +214,54 @@ class Disp_UHET():
                         .batchUpdate(spreadsheetId=Planilha, body=body)
                         .execute())
                     Posicao_Escrever = f"Disponibilidade {ano}01!B5"
+                    Posicao_dados_meteorologica = f"Disponibilidade {ano}01!G5"
                 elif mes == 2:
                     Posicao_Escrever = f"Disponibilidade {ano}02!B5"
+                    Posicao_dados_meteorologica = f"Disponibilidade {ano}02!G5"
                 elif mes == 3:
                     Posicao_Escrever = f"Disponibilidade {ano}03!B5"
+                    Posicao_dados_meteorologica = f"Disponibilidade {ano}03!G5"
                 elif mes == 4:
                     Posicao_Escrever = f"Disponibilidade {ano}04!B5"
+                    Posicao_dados_meteorologica = f"Disponibilidade {ano}04!G5"
                 elif mes == 5:
                     Posicao_Escrever = f"Disponibilidade {ano}05!B5"
+                    Posicao_dados_meteorologica = f"Disponibilidade {ano}05!G5"
                 elif mes == 6:
                     Posicao_Escrever = f"Disponibilidade {ano}06!B5"
+                    Posicao_dados_meteorologica = f"Disponibilidade {ano}06!G5"
                 elif mes == 7:
                     Posicao_Escrever = f"Disponibilidade {ano}07!B5"
+                    Posicao_dados_meteorologica = f"Disponibilidade {ano}07!G5"
                 elif mes == 8:
                     Posicao_Escrever = f"Disponibilidade {ano}08!B5"
+                    Posicao_dados_meteorologica = f"Disponibilidade {ano}08!G5"
                 elif mes == 9:
                     Posicao_Escrever = f"Disponibilidade {ano}09!B5"
+                    Posicao_dados_meteorologica = f"Disponibilidade {ano}09!G5"
                 elif mes == 10:
                     Posicao_Escrever = f"Disponibilidade {ano}10!B5"
+                    Posicao_dados_meteorologica = f"Disponibilidade {ano}10!G5"
                 elif mes == 11:
                     Posicao_Escrever = f"Disponibilidade {ano}11!B5"
+                    Posicao_dados_meteorologica = f"Disponibilidade {ano}11!G5"
                 elif mes == 12:
                     Posicao_Escrever = f"Disponibilidade {ano}12!B5"
+                    Posicao_dados_meteorologica = f"Disponibilidade {ano}12!G5"
                 # Chamada da API de Planilhas
                 sheet = service.spreadsheets()
                 # Executa atualização dos dados na planilha
                 result = (
                     sheet.values()
-                    .update(spreadsheetId=Planilha, range=Posicao_Escrever, valueInputOption="USER_ENTERED", body={"values": resultado})
+                    .update(spreadsheetId=Planilha, range=Posicao_Escrever, valueInputOption="USER_ENTERED", body={"values": valores})
+                    .execute())
+                result = (
+                    sheet.values()
+                    .update(spreadsheetId=Planilha, range=Posicao_dados_meteorologica, valueInputOption="USER_ENTERED", body={"values": meteorologica})
                     .execute())
             except HttpError as err:
                 print(err)
         # Funções
-        resultado = obter_valores()
-        registrar_valores(resultado)
+        valores = obter_valores()
+        meteorologica = [valores.pop()]
+        registrar_valores(valores, meteorologica)
