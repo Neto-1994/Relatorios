@@ -15,14 +15,14 @@ class Disp_UHCB():
             # Abre conexao com o banco de dados
             cursor = obter_conexao().cursor()
             # Execucao da query para todos os codigos registrados
-            consulta_sql = "SELECT COUNT(Dt_Medicao) FROM medicoes WHERE Codigo_Sec IN (1207, 1209, 1200, 1201, 1204) AND Dt_Medicao >= %s AND Dt_Medicao <= %s \
+            consulta_sql = "SELECT COUNT(Dt_Medicao) FROM medicoes WHERE Codigo_Sec IN (1207, 1200, 1201, 1204, 1209) AND Dt_Medicao >= %s AND Dt_Medicao <= %s \
                 GROUP BY Codigo_Sec \
                     ORDER BY CASE Codigo_Sec \
                     WHEN 1207 THEN 1 \
-                    WHEN 1209 THEN 2 \
-                    WHEN 1200 THEN 3 \
-                    WHEN 1201 THEN 4 \
-                    WHEN 1204 THEN 5 \
+                    WHEN 1200 THEN 2 \
+                    WHEN 1201 THEN 3 \
+                    WHEN 1204 THEN 4 \
+                    WHEN 1209 THEN 5 \
                     END;"
             cursor.execute(consulta_sql, (data1, data2))
             # Extrai o valor da contagem dos dados de retorno
@@ -31,7 +31,7 @@ class Disp_UHCB():
                 valores.append(d)
             return valores
 
-        def registrar_valores(valores):
+        def registrar_valores(valores, meteorologica):
             # Parte de log da API Google Sheets
             # If modifying these scopes, delete the file token.json.
             SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
@@ -197,28 +197,40 @@ class Disp_UHCB():
                         .batchUpdate(spreadsheetId=Planilha, body=body)
                         .execute())
                     Posicao_Escrever = f"Disponibilidade {ano}01!B5"
+                    Posicao_dados_meteorologica = f"Disponibilidade {ano}01!G5"
                 elif mes == 2:
                     Posicao_Escrever = f"Disponibilidade {ano}02!B5"
+                    Posicao_dados_meteorologica = f"Disponibilidade {ano}02!G5"
                 elif mes == 3:
                     Posicao_Escrever = f"Disponibilidade {ano}03!B5"
+                    Posicao_dados_meteorologica = f"Disponibilidade {ano}03!G5"
                 elif mes == 4:
                     Posicao_Escrever = f"Disponibilidade {ano}04!B5"
+                    Posicao_dados_meteorologica = f"Disponibilidade {ano}04!G5"
                 elif mes == 5:
                     Posicao_Escrever = f"Disponibilidade {ano}05!B5"
+                    Posicao_dados_meteorologica = f"Disponibilidade {ano}05!G5"
                 elif mes == 6:
                     Posicao_Escrever = f"Disponibilidade {ano}06!B5"
+                    Posicao_dados_meteorologica = f"Disponibilidade {ano}06!G5"
                 elif mes == 7:
                     Posicao_Escrever = f"Disponibilidade {ano}07!B5"
+                    Posicao_dados_meteorologica = f"Disponibilidade {ano}07!G5"
                 elif mes == 8:
                     Posicao_Escrever = f"Disponibilidade {ano}08!B5"
+                    Posicao_dados_meteorologica = f"Disponibilidade {ano}08!G5"
                 elif mes == 9:
                     Posicao_Escrever = f"Disponibilidade {ano}09!B5"
+                    Posicao_dados_meteorologica = f"Disponibilidade {ano}09!G5"
                 elif mes == 10:
                     Posicao_Escrever = f"Disponibilidade {ano}10!B5"
+                    Posicao_dados_meteorologica = f"Disponibilidade {ano}10!G5"
                 elif mes == 11:
                     Posicao_Escrever = f"Disponibilidade {ano}11!B5"
+                    Posicao_dados_meteorologica = f"Disponibilidade {ano}11!G5"
                 elif mes == 12:
                     Posicao_Escrever = f"Disponibilidade {ano}12!B5"
+                    Posicao_dados_meteorologica = f"Disponibilidade {ano}12!G5"
                 # Chamada da API de Planilhas
                 sheet = service.spreadsheets()
                 # Executa atualização dos dados na planilha
@@ -226,8 +238,13 @@ class Disp_UHCB():
                     sheet.values()
                     .update(spreadsheetId=Planilha, range=Posicao_Escrever, valueInputOption="USER_ENTERED", body={"values": valores})
                     .execute())
+                result = (
+                    sheet.values()
+                    .update(spreadsheetId=Planilha, range=Posicao_dados_meteorologica, valueInputOption="USER_ENTERED", body={"values": meteorologica})
+                    .execute())
             except HttpError as err:
                 print(err)
         # Funções
         valores = obter_valores()
-        registrar_valores(valores)
+        meteorologica = [valores.pop()]
+        registrar_valores(valores, meteorologica)

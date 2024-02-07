@@ -16,7 +16,6 @@ class Trans_UHET():
             # Listas para adicionar os dados
             valores = []
             resultado = []
-            meteorologica = []
             # Abre conexao com o banco de dados
             cursor = obter_conexao().cursor()
             # Execucao da query para todos os codigos registrados

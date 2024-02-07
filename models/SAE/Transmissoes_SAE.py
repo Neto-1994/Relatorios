@@ -204,40 +204,28 @@ class Trans_SAE():
                         .batchUpdate(spreadsheetId=Planilha, body=body)
                         .execute())
                     Posicao_dados = f"Transmissoes {ano}01!B5"
-                    Posicao_mes = f"Transmissoes {ano}!B5"
                 elif mes == 2:
                     Posicao_dados = f"Transmissoes {ano}02!B5"
-                    Posicao_mes = f"Transmissoes {ano}!C5"
                 elif mes == 3:
                     Posicao_dados = f"Transmissoes {ano}03!B5"
-                    Posicao_mes = f"Transmissoes {ano}!D5"
                 elif mes == 4:
                     Posicao_dados = f"Transmissoes {ano}04!B5"
-                    Posicao_mes = f"Transmissoes {ano}!E5"
                 elif mes == 5:
                     Posicao_dados = f"Transmissoes {ano}05!B5"
-                    Posicao_mes = f"Transmissoes {ano}!F5"
                 elif mes == 6:
                     Posicao_dados = f"Transmissoes {ano}06!B5"
-                    Posicao_mes = f"Transmissoes {ano}!G5"
                 elif mes == 7:
                     Posicao_dados = f"Transmissoes {ano}07!B5"
-                    Posicao_mes = f"Transmissoes {ano}!H5"
                 elif mes == 8:
                     Posicao_dados = f"Transmissoes {ano}08!B5"
-                    Posicao_mes = f"Transmissoes {ano}!I5"
                 elif mes == 9:
                     Posicao_dados = f"Transmissoes {ano}09!B5"
-                    Posicao_mes = f"Transmissoes {ano}!J5"
                 elif mes == 10:
                     Posicao_dados = f"Transmissoes {ano}10!B5"
-                    Posicao_mes = f"Transmissoes {ano}!K5"
                 elif mes == 11:
                     Posicao_dados = f"Transmissoes {ano}11!B5"
-                    Posicao_mes = f"Transmissoes {ano}!L5"
                 elif mes == 12:
                     Posicao_dados = f"Transmissoes {ano}12!B5"
-                    Posicao_mes = f"Transmissoes {ano}!M5"
                 # Chamada da API de Planilhas
                 sheet = service.spreadsheets()
                 # Escrever dados em uma planilha

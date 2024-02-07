@@ -34,8 +34,8 @@ from models.MARACA.Disponibilidade_MM import Disp_MM
 try:
     class Principal():
         hoje = datetime.today()
-        mes = hoje.month
-        ano = hoje.year
+        mes = 12 #hoje.month
+        ano = 2023 #hoje.year
         if mes == 1:
             mes = 12
             ano -= 1
@@ -55,8 +55,7 @@ try:
         Planilha_UHMI = "1EPMz7Dh_o83bBu5m9eh9GaoTFCBXF1JZCpsIsD2FFLY"
         Planilha_UHSA = "1ng-JqjnlF0qQJ_slf7ufU-oY4q5Aln9ZX9rb1kbCgzs"
         Planilha_UHCB = "1VOKLFjn0XtZ-u3_TMjvgxSN3dDrYiCL3eKbbwgRrdXA"
-        Planilha_MM = "1pOGcsXG_4aAV2Vt1gGgckkbT426T9Qk7YZLUwjqHaW0"
-         #"1ecdZkGcG5XfbkaW94fYk6shbJTk190IanLfQwTZSUNw"
+        Planilha_MM = "1ecdZkGcG5XfbkaW94fYk6shbJTk190IanLfQwTZSUNw"
 
         # Funções
         def Disponibilidade(Planilha_UHET, Planilha_SAE, Planilha_UHJA, Planilha_UHPP, Planilha_PHRO, Planilha_PHJG, Planilha_UHMI, Planilha_UHSA, Planilha_UHCB, Planilha_MM, data1, data2, mes, ano):
@@ -79,15 +78,15 @@ try:
                 Planilha_PHJG, data1, data2, mes, ano)
             objeto = Disp_UHMI()
             instancia = objeto.main(
-                Planilha_UHMI, data1, data2, mes, ano)
+                Planilha_UHMI, data1, data2, mes, ano)'''
             objeto = Disp_UHSA()
             instancia = objeto.main(
                 Planilha_UHSA, data1, data2, mes, ano)
-            objeto = Disp_UHCB()
+            '''objeto = Disp_UHCB()
             instancia = objeto.main(
-                Planilha_UHCB, data1, data2, mes, ano)'''
+                Planilha_UHCB, data1, data2, mes, ano)
             objeto = Disp_MM()
-            instancia = objeto.main(Planilha_MM, data1, data2, mes, ano)
+            instancia = objeto.main(Planilha_MM, data1, data2, mes, ano)'''
 
         def Transmissoes(Planilha_UHET, Planilha_SAE, Planilha_UHJA, Planilha_UHPP, Planilha_PHRO, Planilha_PHJG, Planilha_UHMI, Planilha_UHSA, Planilha_UHCB, Planilha_MM, data1, data2, mes, ano):
             '''objeto = Trans_UHET()
@@ -103,19 +102,19 @@ try:
             objeto = Trans_PHJG()
             instancia = objeto.main(Planilha_PHJG, data1, data2, mes, ano)
             objeto = Trans_UHMI()
-            instancia = objeto.main(Planilha_UHMI, data1, data2, mes, ano)
+            instancia = objeto.main(Planilha_UHMI, data1, data2, mes, ano)'''
             objeto = Trans_UHSA()
             instancia = objeto.main(Planilha_UHSA, data1, data2, mes, ano)
-            objeto = Trans_UHCB()
-            instancia = objeto.main(Planilha_UHCB, data1, data2, mes, ano)'''
+            '''objeto = Trans_UHCB()
+            instancia = objeto.main(Planilha_UHCB, data1, data2, mes, ano)
             objeto = Trans_MM()
-            instancia = objeto.main(Planilha_MM, data1, data2, mes, ano)
+            instancia = objeto.main(Planilha_MM, data1, data2, mes, ano)'''
 
         def EnviosANA(Planilha_UHET, Planilha_UHJA, Planilha_UHPP, Planilha_PHRO, Planilha_PHJG, Planilha_UHMI, Planilha_UHSA, Planilha_UHCB, data1, data2, mes, ano):
-            objeto = Envios_UHET()
+            '''objeto = Envios_UHET()
             instancia = objeto.main(
                 Planilha_UHET, data1, data2, mes, ano)
-            '''objeto = Envios_UHJA()
+            objeto = Envios_UHJA()
             instancia = objeto.main(
                 Planilha_UHJA, data1, data2, mes, ano)
             objeto = Envios_UHPP()

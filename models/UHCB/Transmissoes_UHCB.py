@@ -11,22 +11,22 @@ class Trans_UHCB():
     def main(self, Planilha, data1, data2, mes, ano):
         def obter_valores():
             # Lista com os codigos
-            codigos = [1207, 1209, 1200, 1201, 1204]
+            codigos = [1207, 1200, 1201, 1204, 1209]
             # Listas para adicionar os dados
             valores = []
             resultado = []
             # Abre conexao com o banco de dados
             cursor = obter_conexao().cursor()
             # Execucao da query para todos os codigos registrados
-            consulta_sql = "SELECT codigo_sec, COUNT(hora_transmissao) FROM mensagens WHERE Codigo_Sec IN (1207, 1209, 1200, 1201, 1204) \
+            consulta_sql = "SELECT codigo_sec, COUNT(hora_transmissao) FROM mensagens WHERE Codigo_Sec IN (1207, 1200, 1201, 1204, 1209) \
                 AND hora_transmissao >= %s AND hora_transmissao <= %s AND status_mensagem = 'G' \
                 GROUP BY codigo_sec, DATE(hora_transmissao) \
                     ORDER BY CASE codigo_sec \
                     WHEN 1207 THEN 1 \
-                    WHEN 1209 THEN 2 \
-                    WHEN 1200 THEN 3 \
-                    WHEN 1201 THEN 4 \
-                    WHEN 1204 THEN 5 \
+                    WHEN 1200 THEN 2 \
+                    WHEN 1201 THEN 3 \
+                    WHEN 1204 THEN 4 \
+                    WHEN 1209 THEN 5 \
                     END, DATE(hora_transmissao);"
             cursor.execute(consulta_sql, (data1, data2))
             # Extrai o valor da contagem dos dados de retorno
@@ -41,7 +41,7 @@ class Trans_UHCB():
             resultado.append(valores)
             return resultado
 
-        def registrar_valores(resultado):
+        def registrar_valores(resultado, meteorologica):
             # Parte de log da API Google Sheets
             # If modifying these scopes, delete the file token.json.
             SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
@@ -207,40 +207,40 @@ class Trans_UHCB():
                         .batchUpdate(spreadsheetId=Planilha, body=body)
                         .execute())
                     Posicao_dados = f"Transmissoes {ano}01!B5"
-                    Posicao_mes = f"Transmissoes {ano}!B5"
+                    Posicao_dados_meteorologica = f"Transmissoes {ano}01!B11"
                 elif mes == 2:
                     Posicao_dados = f"Transmissoes {ano}02!B5"
-                    Posicao_mes = f"Transmissoes {ano}!C5"
+                    Posicao_dados_meteorologica = f"Transmissoes {ano}02!B11"
                 elif mes == 3:
                     Posicao_dados = f"Transmissoes {ano}03!B5"
-                    Posicao_mes = f"Transmissoes {ano}!D5"
+                    Posicao_dados_meteorologica = f"Transmissoes {ano}03!B11"
                 elif mes == 4:
                     Posicao_dados = f"Transmissoes {ano}04!B5"
-                    Posicao_mes = f"Transmissoes {ano}!E5"
+                    Posicao_dados_meteorologica = f"Transmissoes {ano}04!B11"
                 elif mes == 5:
                     Posicao_dados = f"Transmissoes {ano}05!B5"
-                    Posicao_mes = f"Transmissoes {ano}!F5"
+                    Posicao_dados_meteorologica = f"Transmissoes {ano}05!B11"
                 elif mes == 6:
                     Posicao_dados = f"Transmissoes {ano}06!B5"
-                    Posicao_mes = f"Transmissoes {ano}!G5"
+                    Posicao_dados_meteorologica = f"Transmissoes {ano}06!B11"
                 elif mes == 7:
                     Posicao_dados = f"Transmissoes {ano}07!B5"
-                    Posicao_mes = f"Transmissoes {ano}!H5"
+                    Posicao_dados_meteorologica = f"Transmissoes {ano}07!B11"
                 elif mes == 8:
                     Posicao_dados = f"Transmissoes {ano}08!B5"
-                    Posicao_mes = f"Transmissoes {ano}!I5"
+                    Posicao_dados_meteorologica = f"Transmissoes {ano}08!B11"
                 elif mes == 9:
                     Posicao_dados = f"Transmissoes {ano}09!B5"
-                    Posicao_mes = f"Transmissoes {ano}!J5"
+                    Posicao_dados_meteorologica = f"Transmissoes {ano}09!B11"
                 elif mes == 10:
                     Posicao_dados = f"Transmissoes {ano}10!B5"
-                    Posicao_mes = f"Transmissoes {ano}!K5"
+                    Posicao_dados_meteorologica = f"Transmissoes {ano}10!B11"
                 elif mes == 11:
                     Posicao_dados = f"Transmissoes {ano}11!B5"
-                    Posicao_mes = f"Transmissoes {ano}!L5"
+                    Posicao_dados_meteorologica = f"Transmissoes {ano}11!B11"
                 elif mes == 12:
                     Posicao_dados = f"Transmissoes {ano}12!B5"
-                    Posicao_mes = f"Transmissoes {ano}!M5"
+                    Posicao_dados_meteorologica = f"Transmissoes {ano}12!B11"
                 # Chamada da API de Planilhas
                 sheet = service.spreadsheets()
                 # Escrever dados em uma planilha
@@ -248,9 +248,14 @@ class Trans_UHCB():
                     sheet.values()
                     .update(spreadsheetId=Planilha, range=Posicao_dados, valueInputOption="USER_ENTERED", body={"values": resultado})
                     .execute())
+                result = (
+                    sheet.values()
+                    .update(spreadsheetId=Planilha, range=Posicao_dados_meteorologica, valueInputOption="USER_ENTERED", body={"values": meteorologica})
+                    .execute())
             except HttpError as err:
                 print(err)
         # Função de busca no banco
         resultado = obter_valores()
+        meteorologica = [resultado.pop()]
         # Função de registro na planilha
-        registrar_valores(resultado)
+        registrar_valores(resultado, meteorologica)
