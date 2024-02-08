@@ -8,7 +8,7 @@ from Conexao import obter_conexao
 
 
 class Envios_UHCB():
-    def main(self, Planilha, data1, data2, dias, mes, ano):
+    def main(self, Planilha, data1, data2, mes, ano):
         def obter_valores():
             # Listas para adicionar os dados
             valores = []
