@@ -1,5 +1,14 @@
-pip install gspread
 
 Guia de inicio para uso da API:
 https://developers.google.com/sheets/api/quickstart/python?hl=pt-br
+
+pip install mysql-connector-python
+
+pip install pyhton-decouple
+
+pip install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib
+
+pip install pandas
+
+pip install openpyxl
 
