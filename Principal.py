@@ -34,8 +34,8 @@ from models.MARACA.Disponibilidade_MM import Disp_MM
 try:
     class Principal():
         hoje = datetime.today()
-        mes = 12  # hoje.month
-        ano = 2023  # hoje.year
+        mes = 2  # hoje.month
+        ano = 2024  # hoje.year
         if mes == 1:
             mes = 12
             ano -= 1
@@ -55,7 +55,7 @@ try:
         Planilha_UHMI = "1EPMz7Dh_o83bBu5m9eh9GaoTFCBXF1JZCpsIsD2FFLY"
         Planilha_UHSA = "1ng-JqjnlF0qQJ_slf7ufU-oY4q5Aln9ZX9rb1kbCgzs"
         Planilha_UHCB = "1VOKLFjn0XtZ-u3_TMjvgxSN3dDrYiCL3eKbbwgRrdXA"
-        Planilha_MM = "1ecdZkGcG5XfbkaW94fYk6shbJTk190IanLfQwTZSUNw" # "1pOGcsXG_4aAV2Vt1gGgckkbT426T9Qk7YZLUwjqHaW0"
+        Planilha_MM = "1pOGcsXG_4aAV2Vt1gGgckkbT426T9Qk7YZLUwjqHaW0" # "1ecdZkGcG5XfbkaW94fYk6shbJTk190IanLfQwTZSUNw"
 
         # Funções
         def Disponibilidade(Planilha_UHET, Planilha_SAE, Planilha_UHJA, Planilha_UHPP, Planilha_PHRO, Planilha_PHJG, Planilha_UHMI, Planilha_UHSA, Planilha_UHCB, Planilha_MM, data1, data2, mes, ano):
@@ -137,8 +137,8 @@ try:
                 Planilha_UHCB, data1, data2, mes, ano)
 
         # Execuções
-        Disponibilidade(Planilha_UHET, Planilha_SAE, Planilha_UHJA, Planilha_UHPP, Planilha_PHRO, Planilha_PHJG,
-                        Planilha_UHMI, Planilha_UHSA, Planilha_UHCB, Planilha_MM, data1, data2, mes, ano)
+        '''Disponibilidade(Planilha_UHET, Planilha_SAE, Planilha_UHJA, Planilha_UHPP, Planilha_PHRO, Planilha_PHJG,
+                        Planilha_UHMI, Planilha_UHSA, Planilha_UHCB, Planilha_MM, data1, data2, mes, ano)'''
         Transmissoes(Planilha_UHET, Planilha_SAE, Planilha_UHJA, Planilha_UHPP, Planilha_PHRO,
                      Planilha_PHJG, Planilha_UHMI, Planilha_UHSA, Planilha_UHCB, Planilha_MM, data1, data2, mes, ano)
         '''EnviosANA(Planilha_UHET, Planilha_UHJA, Planilha_UHPP, Planilha_PHRO, Planilha_PHJG,
