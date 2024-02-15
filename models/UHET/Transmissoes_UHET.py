@@ -15,9 +15,9 @@ class Trans_UHET():
             # Abre conexao com o banco de dados
             cursor = obter_conexao().cursor()
             # Execucao da query para todos os codigos registrados
-            consulta_sql = "SELECT codigo_sec, COUNT(hora_transmissao) FROM mensagens WHERE Codigo_Sec IN (813, 817, 812, 796, 808, 797, 814, 800, 799, 803, 815, 811, 801, 806, 816, 818, 805, 809, 798, 807, 804, 802, 810) \
+            consulta_sql = "SELECT codigo_sec, DAY(hora_transmissao), COUNT(hora_transmissao) FROM mensagens WHERE Codigo_Sec IN (813, 817, 812, 796, 808, 797, 814, 800, 799, 803, 815, 811, 801, 806, 816, 818, 805, 809, 798, 807, 804, 802, 810) \
                 AND hora_transmissao >= %s AND hora_transmissao <= %s AND status_mensagem = 'G' \
-                GROUP BY codigo_sec, DATE(hora_transmissao) \
+                GROUP BY codigo_sec, DAY(hora_transmissao) \
                 ORDER BY CASE codigo_sec \
                     WHEN 813 THEN 1 \
                     WHEN 817 THEN 2 \
@@ -42,18 +42,36 @@ class Trans_UHET():
                     WHEN 804 THEN 21 \
                     WHEN 802 THEN 22 \
                     WHEN 810 THEN 23 \
-                    END, DATE(hora_transmissao);"
+                    END, DAY(hora_transmissao);"
             cursor.execute(consulta_sql, (data1, data2))
             # Extrai o valor da contagem dos dados de retorno
-            c = 0
+            c = 0 # Variavel para percorrer as estacoes
+            dia = 1 # Variavel para contagem e comparação de dias
             for dados in cursor:
-                if dados[0] == codigos[c]:
-                    valores.append(dados[1])
+                if dados[0] == codigos[c]: # Compara os codigos para alinhar os dados em listas
+                    if dados[1] == dia: # Compara o dia do dado com a variavel de comparacao
+                        valores.append(dados[2])
+                        dia += 1
+                    else:
+                        while (dia < dados[1]): # Percorre o periodo ate o dia do dado
+                            valores.append(0) # Vai adicionando zero enquanto percorre o periodo
+                            dia += 1
+                        valores.append(dados[2]) # Adiciona o valor do dado quando a variavel dia igualar com o dia do dado
+                        dia += 1
                 else:
-                    resultado.append(valores)
+                    resultado.append(valores) # Adiciona uma lista de dados diarios dentro de outra lista acumulativa
                     # Reiniciar valores para o novo código
-                    valores = [dados[1]]
-                    c += 1
+                    dia = 1
+                    if dados[1] == dia: # Se o primeiro dia do proximo codigo for igual a variavel de comparacao
+                        valores = [dados[2]] # Inicia uma nova lista com o novo dado
+                        c += 1 # Incrementa a variavel para buscar o proximo codigo para comparacao dos dados
+                        dia += 1 # Incrementa a variavel de comparacao de dias
+                    else:
+                        while (dia < dados[1]): # Percorre o periodo ate o dia do dado, caso o primeiro dia do codigo seja diferente da variavel de comparacao de dias
+                            valores.append(0) # Vai adicionando zero enquanto percorre o periodo
+                            dia +=1
+                        valores.append(dados[2]) # Adiciona o valor do dado quando a variavel dia igualar com o dia do dado
+                        dia += 1
             resultado.append(valores)
             return resultado
 

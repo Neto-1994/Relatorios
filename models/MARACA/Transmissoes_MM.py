@@ -64,7 +64,6 @@ class Trans_MM():
                         valores.append(dados[2]) # Adiciona o valor do dado quando a variavel dia igualar com o dia do dado
                         dia += 1
             resultado.append(valores)
-            print(f'Resultado: {resultado}')
             return resultado
 
         def registrar_valores(resultado, meteorologica):
