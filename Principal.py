@@ -59,11 +59,12 @@ try:
 
         # Funções
         def Disponibilidade(Planilha_UHET, Planilha_SAE, Planilha_UHJA, Planilha_UHPP, Planilha_PHRO, Planilha_PHJG, Planilha_UHMI, Planilha_UHSA, Planilha_UHCB, Planilha_MM, data1, data2, mes, ano):
-            '''objeto = Disp_UHET()
+            objeto = Disp_UHET()
             instancia = objeto.main(
                 Planilha_UHET, data1, data2, mes, ano)
             objeto = Disp_SAE()
-            instancia = objeto.main(Planilha_SAE, data1, data2, mes, ano)
+            instancia = objeto.main(
+                Planilha_SAE, data1, data2, mes, ano)
             objeto = Disp_UHJA()
             instancia = objeto.main(
                 Planilha_UHJA, data1, data2, mes, ano)
@@ -72,11 +73,11 @@ try:
                 Planilha_UHPP, data1, data2, mes, ano)
             objeto = Disp_PHRO()
             instancia = objeto.main(
-                Planilha_PHRO, data1, data2, mes, ano)'''
+                Planilha_PHRO, data1, data2, mes, ano)
             objeto = Disp_PHJG()
             instancia = objeto.main(
                 Planilha_PHJG, data1, data2, mes, ano)
-            '''objeto = Disp_UHMI()
+            objeto = Disp_UHMI()
             instancia = objeto.main(
                 Planilha_UHMI, data1, data2, mes, ano)
             objeto = Disp_UHSA()
@@ -86,10 +87,11 @@ try:
             instancia = objeto.main(
                 Planilha_UHCB, data1, data2, mes, ano)
             objeto = Disp_MM()
-            instancia = objeto.main(Planilha_MM, data1, data2, mes, ano)'''
+            instancia = objeto.main(
+                Planilha_MM, data1, data2, mes, ano)
 
         def Transmissoes(Planilha_UHET, Planilha_SAE, Planilha_UHJA, Planilha_UHPP, Planilha_PHRO, Planilha_PHJG, Planilha_UHMI, Planilha_UHSA, Planilha_UHCB, Planilha_MM, data1, data2, mes, ano):
-            '''objeto = Trans_UHET()
+            objeto = Trans_UHET()
             instancia = objeto.main(Planilha_UHET, data1, data2, mes, ano)
             objeto = Trans_SAE()
             instancia = objeto.main(Planilha_SAE, data1, data2, mes, ano)
@@ -98,17 +100,17 @@ try:
             objeto = Trans_UHPP()
             instancia = objeto.main(Planilha_UHPP, data1, data2, mes, ano)
             objeto = Trans_PHRO()
-            instancia = objeto.main(Planilha_PHRO, data1, data2, mes, ano)'''
+            instancia = objeto.main(Planilha_PHRO, data1, data2, mes, ano)
             objeto = Trans_PHJG()
             instancia = objeto.main(Planilha_PHJG, data1, data2, mes, ano)
-            '''objeto = Trans_UHMI()
+            objeto = Trans_UHMI()
             instancia = objeto.main(Planilha_UHMI, data1, data2, mes, ano)
             objeto = Trans_UHSA()
             instancia = objeto.main(Planilha_UHSA, data1, data2, mes, ano)
             objeto = Trans_UHCB()
             instancia = objeto.main(Planilha_UHCB, data1, data2, mes, ano)
             objeto = Trans_MM()
-            instancia = objeto.main(Planilha_MM, data1, data2, mes, ano)'''
+            instancia = objeto.main(Planilha_MM, data1, data2, mes, ano)
 
         def EnviosANA(Planilha_UHET, Planilha_UHJA, Planilha_UHPP, Planilha_PHRO, Planilha_PHJG, Planilha_UHMI, Planilha_UHSA, Planilha_UHCB, data1, data2, mes, ano):
             objeto = Envios_UHET()
@@ -137,8 +139,8 @@ try:
                 Planilha_UHCB, data1, data2, mes, ano)
 
         # Execuções
-        '''Disponibilidade(Planilha_UHET, Planilha_SAE, Planilha_UHJA, Planilha_UHPP, Planilha_PHRO, Planilha_PHJG,
-                        Planilha_UHMI, Planilha_UHSA, Planilha_UHCB, Planilha_MM, data1, data2, mes, ano)'''
+        Disponibilidade(Planilha_UHET, Planilha_SAE, Planilha_UHJA, Planilha_UHPP, Planilha_PHRO, Planilha_PHJG,
+                        Planilha_UHMI, Planilha_UHSA, Planilha_UHCB, Planilha_MM, data1, data2, mes, ano)
         Transmissoes(Planilha_UHET, Planilha_SAE, Planilha_UHJA, Planilha_UHPP, Planilha_PHRO,
                      Planilha_PHJG, Planilha_UHMI, Planilha_UHSA, Planilha_UHCB, Planilha_MM, data1, data2, mes, ano)
         '''EnviosANA(Planilha_UHET, Planilha_UHJA, Planilha_UHPP, Planilha_PHRO, Planilha_PHJG,
