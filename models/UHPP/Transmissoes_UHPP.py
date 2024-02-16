@@ -47,10 +47,13 @@ class Trans_UHPP():
                         c += 1 # Incrementa a variavel para buscar o proximo codigo para comparacao dos dados
                         dia += 1 # Incrementa a variavel de comparacao de dias
                     else:
+                        valores = [0] # Inicia nova lista com zero
+                        dia += 1 # Incrementa a variavel de comparacao de dias
                         while (dia < dados[1]): # Percorre o periodo ate o dia do dado, caso o primeiro dia do codigo seja diferente da variavel de comparacao de dias
                             valores.append(0) # Vai adicionando zero enquanto percorre o periodo
                             dia +=1
                         valores.append(dados[2]) # Adiciona o valor do dado quando a variavel dia igualar com o dia do dado
+                        c += 1
                         dia += 1
             resultado.append(valores)
             return resultado
@@ -175,7 +178,7 @@ class Trans_UHPP():
                     requests.append({
                         "updateSheetProperties": {
                             "properties": {
-                                "sheetId": 1566820967,  # Substitua pelo ID da aba
+                                "sheetId": 1867819703,  # Substitua pelo ID da aba
                                 # Novo nome da aba
                                 "title": f"Transmissoes {ano}01",
                             },

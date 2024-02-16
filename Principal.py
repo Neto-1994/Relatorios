@@ -34,8 +34,8 @@ from models.MARACA.Disponibilidade_MM import Disp_MM
 try:
     class Principal():
         hoje = datetime.today()
-        mes = 12  # hoje.month
-        ano = 2023  # hoje.year
+        mes = hoje.month
+        ano = hoje.year
         if mes == 1:
             mes = 12
             ano -= 1
@@ -143,8 +143,8 @@ try:
                         Planilha_UHMI, Planilha_UHSA, Planilha_UHCB, Planilha_MM, data1, data2, mes, ano)
         Transmissoes(Planilha_UHET, Planilha_SAE, Planilha_UHJA, Planilha_UHPP, Planilha_PHRO,
                      Planilha_PHJG, Planilha_UHMI, Planilha_UHSA, Planilha_UHCB, Planilha_MM, data1, data2, mes, ano)
-        '''EnviosANA(Planilha_UHET, Planilha_UHJA, Planilha_UHPP, Planilha_PHRO, Planilha_PHJG,
-                  Planilha_UHMI, Planilha_UHSA, Planilha_UHCB, data1, data2, mes, ano)'''
+        EnviosANA(Planilha_UHET, Planilha_UHJA, Planilha_UHPP, Planilha_PHRO, Planilha_PHJG,
+                  Planilha_UHMI, Planilha_UHSA, Planilha_UHCB, data1, data2, mes, ano)
 
         # Encerrar conexao com o banco de dados
         conexao = obter_conexao()
