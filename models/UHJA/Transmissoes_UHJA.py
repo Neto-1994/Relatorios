@@ -3,8 +3,9 @@ from googleapiclient.errors import HttpError
 from Conexao import obter_conexao
 from Validacao import validar
 
+
 class Trans_UHJA():
-    def main(self, Planilha, data1, data2, mes, ano):
+    def main(self, Planilha, data1, data2, mes, ano, dias):
         def obter_valores():
             # Lista com os codigos
             codigos = [879]
@@ -19,36 +20,55 @@ class Trans_UHJA():
                 GROUP BY codigo_sec, DAY(hora_transmissao);"
             cursor.execute(consulta_sql, (data1, data2))
             # Extrai o valor da contagem dos dados de retorno
-            c = 0 # Variavel para percorrer as estacoes
-            dia = 1 # Variavel para contagem e comparação de dias
+            c = 0  # Variavel para percorrer as estacoes
+            dia = 1  # Variavel para contagem e comparação de dias
             for dados in cursor:
-                if dados[0] == codigos[c]: # Compara os codigos para alinhar os dados em listas
-                    if dados[1] == dia: # Compara o dia do dado com a variavel de comparacao
+                if dados[0] == codigos[c]:  # Compara os codigos para alinhar os dados em listas
+                    if dados[1] == dia:  # Compara o dia do dado com a variavel de comparacao
                         valores.append(dados[2])
                         dia += 1
                     else:
-                        while (dia < dados[1]): # Percorre o periodo ate o dia do dado
-                            valores.append(0) # Vai adicionando zero enquanto percorre o periodo
+                        while (dia < dados[1]):  # Percorre o periodo ate o dia do dado
+                            # Vai adicionando zero enquanto percorre o periodo
+                            valores.append(0)
                             dia += 1
-                        valores.append(dados[2]) # Adiciona o valor do dado quando a variavel dia igualar com o dia do dado
+                        # Adiciona o valor do dado quando a variavel dia igualar com o dia do dado
+                        valores.append(dados[2])
                         dia += 1
                 else:
-                    resultado.append(valores) # Adiciona uma lista de dados diarios dentro de outra lista acumulativa
+                    # Verifica se a quantidade de valores é menor que a quantidade de dias no mês
+                    if len(valores) < dias:
+                        # Adiciona 0 na lista até completar a quantidade de dias no mês
+                        while (len(valores) < dias):
+                            valores.append(0)
+                    # Adiciona uma lista de dados diarios dentro de outra lista acumulativa
+                    resultado.append(valores)
                     # Reiniciar valores para o novo código
                     dia = 1
-                    if dados[1] == dia: # Se o primeiro dia do proximo codigo for igual a variavel de comparacao
-                        valores = [dados[2]] # Inicia uma nova lista com o novo dado
-                        c += 1 # Incrementa a variavel para buscar o proximo codigo para comparacao dos dados
-                        dia += 1 # Incrementa a variavel de comparacao de dias
+                    # Se o primeiro dia do proximo codigo for igual a variavel de comparacao
+                    if dados[1] == dia:
+                        # Inicia uma nova lista com o novo dado
+                        valores = [dados[2]]
+                        c += 1  # Incrementa a variavel para buscar o proximo codigo para comparacao dos dados
+                        dia += 1  # Incrementa a variavel de comparacao de dias
                     else:
-                        valores = [0] # Inicia nova lista com zero
-                        dia += 1 # Incrementa a variavel de comparacao de dias
-                        while (dia < dados[1]): # Percorre o periodo ate o dia do dado, caso o primeiro dia do codigo seja diferente da variavel de comparacao de dias
-                            valores.append(0) # Vai adicionando zero enquanto percorre o periodo
-                            dia +=1
-                        valores.append(dados[2]) # Adiciona o valor do dado quando a variavel dia igualar com o dia do dado
+                        valores = [0]  # Inicia nova lista com zero
+                        dia += 1  # Incrementa a variavel de comparacao de dias
+                        # Percorre o periodo ate o dia do dado, caso o primeiro dia do codigo seja diferente da variavel de comparacao de dias
+                        while (dia < dados[1]):
+                            # Vai adicionando zero enquanto percorre o periodo
+                            valores.append(0)
+                            dia += 1
+                        # Adiciona o valor do dado quando a variavel dia igualar com o dia do dado
+                        valores.append(dados[2])
                         c += 1
                         dia += 1
+            # Verifica se a quantidade de valores é menor que a quantidade de dias no mês
+                    if len(valores) < dias:
+                        # Adiciona 0 na lista até completar a quantidade de dias no mês
+                        while (len(valores) < dias):
+                            valores.append(0)
+            # Adiciona uma lista de dados diarios dentro de outra lista acumulativa
             resultado.append(valores)
             return resultado
 

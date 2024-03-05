@@ -55,11 +55,12 @@ try:
         Planilha_UHMI = "1EPMz7Dh_o83bBu5m9eh9GaoTFCBXF1JZCpsIsD2FFLY"
         Planilha_UHSA = "1ng-JqjnlF0qQJ_slf7ufU-oY4q5Aln9ZX9rb1kbCgzs"
         Planilha_UHCB = "1VOKLFjn0XtZ-u3_TMjvgxSN3dDrYiCL3eKbbwgRrdXA"
-        Planilha_MM = "1ecdZkGcG5XfbkaW94fYk6shbJTk190IanLfQwTZSUNw" # "1pOGcsXG_4aAV2Vt1gGgckkbT426T9Qk7YZLUwjqHaW0"
+        # "1ecdZkGcG5XfbkaW94fYk6shbJTk190IanLfQwTZSUNw"
+        Planilha_MM = "1pOGcsXG_4aAV2Vt1gGgckkbT426T9Qk7YZLUwjqHaW0"
 
         # Funções
         def Disponibilidade(Planilha_UHET, Planilha_SAE, Planilha_UHJA, Planilha_UHPP, Planilha_PHRO, Planilha_PHJG, Planilha_UHMI, Planilha_UHSA, Planilha_UHCB, Planilha_MM, data1, data2, mes, ano):
-            objeto = Disp_UHET()
+            '''objeto = Disp_UHET()
             instancia = objeto.main(
                 Planilha_UHET, data1, data2, mes, ano)
             objeto = Disp_SAE()
@@ -85,32 +86,32 @@ try:
                 Planilha_UHSA, data1, data2, mes, ano)
             objeto = Disp_UHCB()
             instancia = objeto.main(
-                Planilha_UHCB, data1, data2, mes, ano)
+                Planilha_UHCB, data1, data2, mes, ano)'''
             objeto = Disp_MM()
             instancia = objeto.main(
                 Planilha_MM, data1, data2, mes, ano)
 
-        def Transmissoes(Planilha_UHET, Planilha_SAE, Planilha_UHJA, Planilha_UHPP, Planilha_PHRO, Planilha_PHJG, Planilha_UHMI, Planilha_UHSA, Planilha_UHCB, Planilha_MM, data1, data2, mes, ano):
-            objeto = Trans_UHET()
-            instancia = objeto.main(Planilha_UHET, data1, data2, mes, ano)
+        def Transmissoes(Planilha_UHET, Planilha_SAE, Planilha_UHJA, Planilha_UHPP, Planilha_PHRO, Planilha_PHJG, Planilha_UHMI, Planilha_UHSA, Planilha_UHCB, Planilha_MM, data1, data2, mes, ano, dias):
+            '''objeto = Trans_UHET()
+            instancia = objeto.main(Planilha_UHET, data1, data2, mes, ano, dias)
             objeto = Trans_SAE()
-            instancia = objeto.main(Planilha_SAE, data1, data2, mes, ano)
+            instancia = objeto.main(Planilha_SAE, data1, data2, mes, ano, dias)
             objeto = Trans_UHJA()
-            instancia = objeto.main(Planilha_UHJA, data1, data2, mes, ano)
+            instancia = objeto.main(Planilha_UHJA, data1, data2, mes, ano, dias)
             objeto = Trans_UHPP()
-            instancia = objeto.main(Planilha_UHPP, data1, data2, mes, ano)
+            instancia = objeto.main(Planilha_UHPP, data1, data2, mes, ano, dias)
             objeto = Trans_PHRO()
-            instancia = objeto.main(Planilha_PHRO, data1, data2, mes, ano)
+            instancia = objeto.main(Planilha_PHRO, data1, data2, mes, ano, dias)
             objeto = Trans_PHJG()
-            instancia = objeto.main(Planilha_PHJG, data1, data2, mes, ano)
+            instancia = objeto.main(Planilha_PHJG, data1, data2, mes, ano, dias)
             objeto = Trans_UHMI()
-            instancia = objeto.main(Planilha_UHMI, data1, data2, mes, ano)
+            instancia = objeto.main(Planilha_UHMI, data1, data2, mes, ano, dias)
             objeto = Trans_UHSA()
-            instancia = objeto.main(Planilha_UHSA, data1, data2, mes, ano)
+            instancia = objeto.main(Planilha_UHSA, data1, data2, mes, ano, dias)
             objeto = Trans_UHCB()
-            instancia = objeto.main(Planilha_UHCB, data1, data2, mes, ano)
+            instancia = objeto.main(Planilha_UHCB, data1, data2, mes, ano, dias)'''
             objeto = Trans_MM()
-            instancia = objeto.main(Planilha_MM, data1, data2, mes, ano)
+            instancia = objeto.main(Planilha_MM, data1, data2, mes, ano, dias)
 
         def EnviosANA(Planilha_UHET, Planilha_UHJA, Planilha_UHPP, Planilha_PHRO, Planilha_PHJG, Planilha_UHMI, Planilha_UHSA, Planilha_UHCB, data1, data2, mes, ano):
             objeto = Envios_UHET()
@@ -142,9 +143,9 @@ try:
         Disponibilidade(Planilha_UHET, Planilha_SAE, Planilha_UHJA, Planilha_UHPP, Planilha_PHRO, Planilha_PHJG,
                         Planilha_UHMI, Planilha_UHSA, Planilha_UHCB, Planilha_MM, data1, data2, mes, ano)
         Transmissoes(Planilha_UHET, Planilha_SAE, Planilha_UHJA, Planilha_UHPP, Planilha_PHRO,
-                     Planilha_PHJG, Planilha_UHMI, Planilha_UHSA, Planilha_UHCB, Planilha_MM, data1, data2, mes, ano)
-        EnviosANA(Planilha_UHET, Planilha_UHJA, Planilha_UHPP, Planilha_PHRO, Planilha_PHJG,
-                  Planilha_UHMI, Planilha_UHSA, Planilha_UHCB, data1, data2, mes, ano)
+                     Planilha_PHJG, Planilha_UHMI, Planilha_UHSA, Planilha_UHCB, Planilha_MM, data1, data2, mes, ano, dias)
+        '''EnviosANA(Planilha_UHET, Planilha_UHJA, Planilha_UHPP, Planilha_PHRO, Planilha_PHJG,
+                  Planilha_UHMI, Planilha_UHSA, Planilha_UHCB, data1, data2, mes, ano)'''
 
         # Encerrar conexao com o banco de dados
         conexao = obter_conexao()
