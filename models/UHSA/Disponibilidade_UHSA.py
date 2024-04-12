@@ -11,16 +11,24 @@ class Disp_UHSA():
             # Abre conexao com o banco de dados
             cursor = obter_conexao().cursor()
             # Execucao da query para todos os codigos registrados
-            consulta_sql = "SELECT COUNT(Dt_Medicao) FROM medicoes WHERE Codigo_Sec IN (1208, 1203, 1202, 1206, 1205, 1210) AND Dt_Medicao >= %s AND Dt_Medicao <= %s \
-                GROUP BY Codigo_Sec \
-                    ORDER BY CASE Codigo_Sec \
-                    WHEN 1208 THEN 1 \
-                    WHEN 1203 THEN 2 \
-                    WHEN 1202 THEN 3 \
-                    WHEN 1206 THEN 4 \
-                    WHEN 1205 THEN 5 \
-                    WHEN 1210 THEN 6 \
-                    END;"
+            consulta_sql = "SELECT COUNT(m.Dt_Medicao) \
+                            FROM ( \
+                                SELECT DISTINCT Codigo_Sec \
+                                FROM medicoes \
+                                WHERE Codigo_Sec IN (1208, 1203, 1202, 1206, 1205, 1210) \
+                            ) c \
+                            LEFT JOIN medicoes m \
+                                ON c.Codigo_Sec = m.Codigo_Sec \
+                                AND m.Dt_Medicao >= %s AND m.Dt_Medicao <= %s \
+                            GROUP BY c.Codigo_Sec \
+                            ORDER BY CASE c.Codigo_Sec \
+                                WHEN 1208 THEN 1 \
+                                WHEN 1203 THEN 2 \
+                                WHEN 1202 THEN 3 \
+                                WHEN 1206 THEN 4 \
+                                WHEN 1205 THEN 5 \
+                                WHEN 1210 THEN 6 \
+                                END;"
             cursor.execute(consulta_sql, (data1, data2))
             # Extrai o valor da contagem dos dados de retorno
             for dados in cursor:

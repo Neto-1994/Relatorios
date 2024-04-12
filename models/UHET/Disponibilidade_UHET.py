@@ -11,32 +11,41 @@ class Disp_UHET():
             # Abre conexao com o banco de dados
             cursor = obter_conexao().cursor()
             # Execucao da query para todos os codigos registrados
-            consulta_sql = "SELECT COUNT(Dt_Medicao) FROM medicoes WHERE Codigo_Sec IN (813, 817, 812, 796, 808, 797, 814, 800, 799, 803, 815, 811, 801, 806, 816, 818, 805, 809, 798, 807, 804, 802, 810) AND Dt_Medicao >= %s AND Dt_Medicao <= %s GROUP BY Codigo_Sec \
-                ORDER BY CASE Codigo_Sec \
-                    WHEN 813 THEN 1 \
-                    WHEN 817 THEN 2 \
-                    WHEN 812 THEN 3 \
-                    WHEN 796 THEN 4 \
-                    WHEN 808 THEN 5 \
-                    WHEN 797 THEN 6 \
-                    WHEN 814 THEN 7 \
-                    WHEN 800 THEN 8 \
-                    WHEN 799 THEN 9 \
-                    WHEN 803 THEN 10 \
-                    WHEN 815 THEN 11 \
-                    WHEN 811 THEN 12 \
-                    WHEN 801 THEN 13 \
-                    WHEN 806 THEN 14 \
-                    WHEN 816 THEN 15 \
-                    WHEN 818 THEN 16 \
-                    WHEN 805 THEN 17 \
-                    WHEN 809 THEN 18 \
-                    WHEN 798 THEN 19 \
-                    WHEN 807 THEN 20 \
-                    WHEN 804 THEN 21 \
-                    WHEN 802 THEN 22 \
-                    WHEN 810 THEN 23 \
-                    END;"
+            consulta_sql = "SELECT COUNT(m.Dt_Medicao) \
+                            FROM ( \
+                                SELECT DISTINCT Codigo_Sec \
+                                FROM medicoes \
+                                WHERE Codigo_Sec IN (813, 817, 812, 796, 808, 797, 814, 800, 799, 803, 815, 811, 801, 806, 816, 818, 805, 809, 798, 807, 804, 802, 810) \
+                            ) c \
+                            LEFT JOIN medicoes m \
+                                ON c.Codigo_Sec = m.Codigo_Sec \
+                                AND m.Dt_Medicao >= %s AND m.Dt_Medicao <= %s \
+                            GROUP BY c.Codigo_Sec \
+                            ORDER BY CASE c.Codigo_Sec \
+                                WHEN 813 THEN 1 \
+                                WHEN 817 THEN 2 \
+                                WHEN 812 THEN 3 \
+                                WHEN 796 THEN 4 \
+                                WHEN 808 THEN 5 \
+                                WHEN 797 THEN 6 \
+                                WHEN 814 THEN 7 \
+                                WHEN 800 THEN 8 \
+                                WHEN 799 THEN 9 \
+                                WHEN 803 THEN 10 \
+                                WHEN 815 THEN 11 \
+                                WHEN 811 THEN 12 \
+                                WHEN 801 THEN 13 \
+                                WHEN 806 THEN 14 \
+                                WHEN 816 THEN 15 \
+                                WHEN 818 THEN 16 \
+                                WHEN 805 THEN 17 \
+                                WHEN 809 THEN 18 \
+                                WHEN 798 THEN 19 \
+                                WHEN 807 THEN 20 \
+                                WHEN 804 THEN 21 \
+                                WHEN 802 THEN 22 \
+                                WHEN 810 THEN 23 \
+                                END;"
             cursor.execute(consulta_sql, (data1, data2))
             # Extrai o valor da contagem dos dados de retorno
             for dados in cursor:

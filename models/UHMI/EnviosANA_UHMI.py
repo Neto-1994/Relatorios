@@ -11,13 +11,21 @@ class Envios_UHMI():
             # Abre conexao com o banco de dados
             cursor = obter_conexao().cursor()
             # Execucao da query para todos os codigos registrados
-            consulta_sql = "SELECT COUNT(*) FROM log_ANA WHERE Codigo_Sec IN (877, 878) \
-                AND dt_medicao >= %s AND dt_medicao <= %s AND (TIMESTAMPDIFF(MINUTE, DATE_SUB(dt_medicao, INTERVAL 3 HOUR), dt_transmissao)) <= 180 \
-                GROUP BY Codigo_Sec \
-                    ORDER BY CASE Codigo_Sec \
-                    WHEN 877 THEN 1 \
-                    WHEN 878 THEN 2 \
-                    END;"
+            consulta_sql = "SELECT COUNT(*) \
+                            FROM ( \
+                                SELECT DISTINCT codigo_sec \
+                                FROM log_ANA \
+                                WHERE codigo_sec IN (877, 878) \
+                            ) c \
+                            LEFT JOIN log_ANA l \
+                                ON c.codigo_sec = l.codigo_sec \
+                                AND l.dt_medicao >= %s AND l.dt_medicao <= %s \
+                                AND (TIMESTAMPDIFF(MINUTE, DATE_SUB(l.dt_medicao, INTERVAL 3 HOUR), l.dt_transmissao)) <= 180 \
+                            GROUP BY c.codigo_sec \
+                            ORDER BY CASE c.codigo_sec \
+                                WHEN 877 THEN 1 \
+                                WHEN 878 THEN 2 \
+                                END;"
             cursor.execute(consulta_sql, (data1, data2))
             # Extrai o valor da contagem dos dados de retorno
             for dados in cursor:

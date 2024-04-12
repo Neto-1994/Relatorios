@@ -11,12 +11,20 @@ class Disp_PHRO():
             # Abre conexao com o banco de dados
             cursor = obter_conexao().cursor()
             # Execucao da query para todos os codigos registrados
-            consulta_sql = "SELECT COUNT(Dt_Medicao) FROM medicoes WHERE Codigo_Sec IN (872, 873) AND Dt_Medicao >= %s AND Dt_Medicao <= %s \
-                GROUP BY Codigo_Sec \
-                    ORDER BY CASE Codigo_Sec \
-                    WHEN 872 THEN 1 \
-                    WHEN 873 THEN 2 \
-                    END;"
+            consulta_sql = "SELECT COUNT(m.Dt_Medicao) \
+                            FROM ( \
+                                SELECT DISTINCT Codigo_Sec \
+                                FROM medicoes \
+                                WHERE Codigo_Sec IN (872, 873) \
+                            ) c \
+                            LEFT JOIN medicoes m \
+                                ON c.Codigo_Sec = m.Codigo_Sec \
+                                AND m.Dt_Medicao >= %s AND m.Dt_Medicao <= %s \
+                            GROUP BY c.Codigo_Sec \
+                            ORDER BY CASE c.Codigo_Sec \
+                                WHEN 872 THEN 1 \
+                                WHEN 873 THEN 2 \
+                                END;"
             cursor.execute(consulta_sql, (data1, data2))
             # Extrai o valor da contagem dos dados de retorno
             for dados in cursor:

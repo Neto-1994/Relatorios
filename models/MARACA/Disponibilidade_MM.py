@@ -11,23 +11,32 @@ class Disp_MM():
             # Abre conexao com o banco de dados
             cursor = obter_conexao().cursor()
             # Execucao da query para todos os codigos registrados
-            consulta_sql = "SELECT COUNT(Dt_Medicao) FROM medicoes WHERE Codigo_Sec IN (1243, 1245, 1244, 1247, 1246, 1222, 1221, 1226, 1227, 1228, 1229, 1230, 1231, 1232) AND Dt_Medicao >= %s AND Dt_Medicao <= %s GROUP BY Codigo_Sec \
-                ORDER BY CASE Codigo_Sec \
-                    WHEN 1243 THEN 1 \
-                    WHEN 1245 THEN 2 \
-                    WHEN 1244 THEN 3 \
-                    WHEN 1247 THEN 4 \
-                    WHEN 1246 THEN 5 \
-                    WHEN 1222 THEN 6 \
-                    WHEN 1221 THEN 7 \
-                    WHEN 1226 THEN 8 \
-                    WHEN 1227 THEN 9 \
-                    WHEN 1228 THEN 10 \
-                    WHEN 1229 THEN 11 \
-                    WHEN 1230 THEN 12 \
-                    WHEN 1231 THEN 13 \
-                    WHEN 1232 THEN 14 \
-                    END;"
+            consulta_sql = "SELECT COUNT(m.Dt_Medicao) \
+                            FROM ( \
+                                SELECT DISTINCT Codigo_Sec \
+                                FROM medicoes \
+                                WHERE Codigo_Sec IN (1243, 1245, 1244, 1247, 1246, 1222, 1221, 1226, 1227, 1228, 1229, 1230, 1231, 1232) \
+                            ) c \
+                            LEFT JOIN medicoes m \
+                                ON c.Codigo_Sec = m.Codigo_Sec \
+                                AND m.Dt_Medicao >= %s AND m.Dt_Medicao <= %s \
+                            GROUP BY c.Codigo_Sec \
+                            ORDER BY CASE c.Codigo_Sec \
+                                WHEN 1243 THEN 1 \
+                                WHEN 1245 THEN 2 \
+                                WHEN 1244 THEN 3 \
+                                WHEN 1247 THEN 4 \
+                                WHEN 1246 THEN 5 \
+                                WHEN 1222 THEN 6 \
+                                WHEN 1221 THEN 7 \
+                                WHEN 1226 THEN 8 \
+                                WHEN 1227 THEN 9 \
+                                WHEN 1228 THEN 10 \
+                                WHEN 1229 THEN 11 \
+                                WHEN 1230 THEN 12 \
+                                WHEN 1231 THEN 13 \
+                                WHEN 1232 THEN 14 \
+                                END;"
             cursor.execute(consulta_sql, (data1, data2))
             # Extrai o valor da contagem dos dados de retorno
             for dados in cursor:
@@ -228,7 +237,9 @@ class Disp_MM():
                 print(err)
         # Funções
         valores = obter_valores()
+        #print(f'Dados de disponibilidade: {valores}')
         meteorologica = valores[-2:]
         valores = valores[:-2]
+        # Função de registro na planilha
         registrar_valores(valores, meteorologica)
 

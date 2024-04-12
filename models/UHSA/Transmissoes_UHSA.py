@@ -3,7 +3,6 @@ from googleapiclient.errors import HttpError
 from Conexao import obter_conexao
 from Validacao import validar
 
-
 class Trans_UHSA():
     def main(self, Planilha, data1, data2, mes, ano, dias):
         def obter_valores():
@@ -15,17 +14,25 @@ class Trans_UHSA():
             # Abre conexao com o banco de dados
             cursor = obter_conexao().cursor()
             # Execucao da query para todos os codigos registrados
-            consulta_sql = "SELECT codigo_sec, DAY(hora_transmissao), COUNT(hora_transmissao) FROM mensagens WHERE Codigo_Sec IN (1208, 1203, 1202, 1206, 1205, 1210) \
-                AND hora_transmissao >= %s AND hora_transmissao <= %s AND status_mensagem = 'G' \
-                GROUP BY codigo_sec, DAY(hora_transmissao) \
-                    ORDER BY CASE codigo_sec \
-                    WHEN 1208 THEN 1 \
-                    WHEN 1203 THEN 2 \
-                    WHEN 1202 THEN 3 \
-                    WHEN 1206 THEN 4 \
-                    WHEN 1205 THEN 5 \
-                    WHEN 1210 THEN 6 \
-                    END, DAY(hora_transmissao);"
+            consulta_sql = "SELECT c.codigo_sec, DAY(m.hora_transmissao), COUNT(m.hora_transmissao) \
+                            FROM ( \
+                                SELECT DISTINCT codigo_sec \
+                                FROM mensagens \
+                                WHERE codigo_sec IN (1208, 1203, 1202, 1206, 1205, 1210) \
+                            ) c \
+                            LEFT JOIN mensagens m \
+                                ON c.codigo_sec = m.codigo_sec \
+                                AND m.hora_transmissao >= %s AND m.hora_transmissao <= %s \
+                                AND m.status_mensagem = 'G' \
+                            GROUP BY c.codigo_sec, DAY(m.hora_transmissao) \
+                            ORDER BY CASE c.codigo_sec \
+                                WHEN 1208 THEN 1 \
+                                WHEN 1203 THEN 2 \
+                                WHEN 1202 THEN 3 \
+                                WHEN 1206 THEN 4 \
+                                WHEN 1205 THEN 5 \
+                                WHEN 1210 THEN 6 \
+                                END, DAY(m.hora_transmissao);"
             cursor.execute(consulta_sql, (data1, data2))
             # Extrai o valor da contagem dos dados de retorno
             c = 0  # Variavel para percorrer as estacoes
@@ -53,24 +60,35 @@ class Trans_UHSA():
                     resultado.append(valores)
                     # Reiniciar valores para o novo código
                     dia = 1
-                    # Se o primeiro dia do proximo codigo for igual a variavel de comparacao
-                    if dados[1] == dia:
-                        # Inicia uma nova lista com o novo dado
+                    # Verificação em caso de não houver nenhum dado de uma estação
+                    if dados[1] is None:
+                        # Inicia uma nova lista com a quantidade de dados encontrado no período
                         valores = [dados[2]]
-                        c += 1  # Incrementa a variavel para buscar o proximo codigo para comparacao dos dados
-                        dia += 1  # Incrementa a variavel de comparacao de dias
-                    else:
-                        valores = [0]  # Inicia nova lista com zero
-                        dia += 1  # Incrementa a variavel de comparacao de dias
-                        # Percorre o periodo ate o dia do dado, caso o primeiro dia do codigo seja diferente da variavel de comparacao de dias
-                        while (dia < dados[1]):
-                            # Vai adicionando zero enquanto percorre o periodo
+                        # Adiciona 0 na lista até completar a quantidade de dias no mês
+                        while (len(valores) < dias):
                             valores.append(0)
-                            dia += 1
-                        # Adiciona o valor do dado quando a variavel dia igualar com o dia do dado
-                        valores.append(dados[2])
+                        # Atualiza as variáveis para a próxima linha de dados
                         c += 1
-                        dia += 1
+                        dia = 1
+                    else:
+                        # Se o primeiro dia do proximo codigo for igual a variavel de comparacao
+                        if dados[1] == dia:
+                            # Inicia uma nova lista com o novo dado
+                            valores = [dados[2]]
+                            c += 1  # Incrementa a variavel para buscar o proximo codigo para comparacao dos dados
+                            dia += 1  # Incrementa a variavel de comparacao de dias
+                        else:
+                            valores = [0]  # Inicia nova lista com zero
+                            dia += 1  # Incrementa a variavel de comparacao de dias
+                            # Percorre o periodo ate o dia do dado, caso o primeiro dia do codigo seja diferente da variavel de comparacao de dias
+                            while (dia < dados[1]):
+                                # Vai adicionando zero enquanto percorre o periodo
+                                valores.append(0)
+                                dia += 1
+                            # Adiciona o valor do dado quando a variavel dia igualar com o dia do dado
+                            valores.append(dados[2])
+                            c += 1
+                            dia += 1
             # Verifica se a quantidade de valores é menor que a quantidade de dias no mês
             if len(valores) < dias:
                 # Adiciona 0 na lista até completar a quantidade de dias no mês
