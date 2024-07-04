@@ -1,5 +1,5 @@
 from googleapiclient.discovery import build
-from googleapiclient.errors import HttpError
+from urllib.error import HTTPError
 from Conexao import obter_conexao
 from Validacao import validar
 
@@ -15,12 +15,16 @@ class Disp_UHJA():
                             FROM ( \
                                 SELECT DISTINCT Codigo_Sec \
                                 FROM medicoes \
-                                WHERE Codigo_Sec IN (879) \
+                                WHERE Codigo_Sec IN (879, 886) \
                             ) c \
                             LEFT JOIN medicoes m \
                                 ON c.Codigo_Sec = m.Codigo_Sec \
                                 AND m.Dt_Medicao >= %s AND m.Dt_Medicao <= %s \
-                            GROUP BY c.Codigo_Sec;"
+                            GROUP BY c.Codigo_Sec \
+                            ORDER BY CASE c.Codigo_Sec \
+                                WHEN 879 THEN 1 \
+                                WHEN 886 THEN 2 \
+                                END;"
             cursor.execute(consulta_sql, (data1, data2))
             # Extrai o valor da contagem dos dados de retorno
             for dados in cursor:
@@ -201,7 +205,7 @@ class Disp_UHJA():
                     sheet.values()
                     .update(spreadsheetId=Planilha, range=Posicao_Escrever, valueInputOption="USER_ENTERED", body={"values": valores})
                     .execute())
-            except HttpError as err:
+            except HTTPError as err:
                 print(err)
         # Funções
         valores = obter_valores()

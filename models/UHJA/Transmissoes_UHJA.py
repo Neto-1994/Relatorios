@@ -1,5 +1,6 @@
+
 from googleapiclient.discovery import build
-from googleapiclient.errors import HttpError
+from urllib.error import HTTPError
 from Conexao import obter_conexao
 from Validacao import validar
 
@@ -7,7 +8,7 @@ class Trans_UHJA():
     def main(self, Planilha, data1, data2, mes, ano, dias):
         def obter_valores():
             # Lista com os codigos
-            codigos = [879]
+            codigos = [879, 886]
             # Listas para adicionar os dados
             valores = []
             resultado = []
@@ -18,13 +19,17 @@ class Trans_UHJA():
                             FROM ( \
                                 SELECT DISTINCT codigo_sec \
                                 FROM mensagens \
-                                WHERE codigo_sec IN (879) \
+                                WHERE codigo_sec IN (879, 886) \
                             ) c \
                             LEFT JOIN mensagens m \
                                 ON c.codigo_sec = m.codigo_sec \
                                 AND m.hora_transmissao >= %s AND m.hora_transmissao <= %s \
                                 AND m.status_mensagem = 'G' \
-                            GROUP BY c.codigo_sec, DAY(m.hora_transmissao);"
+                            GROUP BY c.codigo_sec, DAY(m.hora_transmissao) \
+                            ORDER BY CASE c.codigo_sec \
+                                WHEN 879 THEN 1 \
+                                WHEN 886 THEN 2 \
+                                END, DAY(m.hora_transmissao);"
             cursor.execute(consulta_sql, (data1, data2))
             # Extrai o valor da contagem dos dados de retorno
             c = 0  # Variavel para percorrer as estacoes
@@ -82,10 +87,10 @@ class Trans_UHJA():
                             c += 1
                             dia += 1
             # Verifica se a quantidade de valores é menor que a quantidade de dias no mês
-                    if len(valores) < dias:
-                        # Adiciona 0 na lista até completar a quantidade de dias no mês
-                        while (len(valores) < dias):
-                            valores.append(0)
+            if len(valores) < dias:
+                # Adiciona 0 na lista até completar a quantidade de dias no mês
+                while (len(valores) < dias):
+                    valores.append(0)
             # Adiciona uma lista de dados diarios dentro de outra lista acumulativa
             resultado.append(valores)
             return resultado
@@ -263,7 +268,7 @@ class Trans_UHJA():
                     sheet.values()
                     .update(spreadsheetId=Planilha, range=Posicao_dados, valueInputOption="USER_ENTERED", body={"values": resultado})
                     .execute())
-            except HttpError as err:
+            except HTTPError as err:
                 print(err)
         # Função de busca no banco
         resultado = obter_valores()

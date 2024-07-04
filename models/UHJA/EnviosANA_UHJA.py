@@ -1,5 +1,5 @@
 from googleapiclient.discovery import build
-from googleapiclient.errors import HttpError
+from urllib.error import HTTPError
 from Conexao import obter_conexao
 from Validacao import validar
 
@@ -202,7 +202,7 @@ class Envios_UHJA():
                     sheet.values()
                     .update(spreadsheetId=Planilha, range=Posicao_Escrever, valueInputOption="USER_ENTERED", body={"values": valores})
                     .execute())
-            except HttpError as err:
+            except HTTPError as err:
                 print(err)
         # Funções
         valores = obter_valores()
