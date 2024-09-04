@@ -15,7 +15,7 @@ class Disp_MM():
                             FROM ( \
                                 SELECT DISTINCT Codigo_Sec \
                                 FROM medicoes \
-                                WHERE Codigo_Sec IN (1243, 1245, 1244, 1247, 1246, 1222, 1221, 1226, 1227, 1228, 1229, 1230, 1231, 1232) \
+                                WHERE Codigo_Sec IN (1243, 1245, 1244, 1247, 1246, 1222, 1221, 1226, 1227, 1228, 1229, 1230, 1252, 1256, 1253, 1254, 1255, 1231, 1232) \
                             ) c \
                             LEFT JOIN medicoes m \
                                 ON c.Codigo_Sec = m.Codigo_Sec \
@@ -34,8 +34,13 @@ class Disp_MM():
                                 WHEN 1228 THEN 10 \
                                 WHEN 1229 THEN 11 \
                                 WHEN 1230 THEN 12 \
-                                WHEN 1231 THEN 13 \
-                                WHEN 1232 THEN 14 \
+                                WHEN 1252 THEN 13 \
+                                WHEN 1256 THEN 14 \
+                                WHEN 1253 THEN 15 \
+                                WHEN 1254 THEN 16 \
+                                WHEN 1255 THEN 17 \
+                                WHEN 1231 THEN 18 \
+                                WHEN 1232 THEN 19 \
                                 END;"
             cursor.execute(consulta_sql, (data1, data2))
             # Extrai o valor da contagem dos dados de retorno

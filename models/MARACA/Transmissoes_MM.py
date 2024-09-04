@@ -7,7 +7,7 @@ class Trans_MM():
     def main(self, Planilha, data1, data2, mes, ano, dias):
         def obter_valores():
             # Lista com os codigos
-            codigos = [1243, 1245, 1244, 1247, 1246, 1222, 1221, 1226, 1227, 1228, 1229, 1230, 1231, 1232]
+            codigos = [1243, 1245, 1244, 1247, 1246, 1222, 1221, 1226, 1227, 1228, 1229, 1230, 1252, 1256, 1253, 1254, 1255, 1231, 1232]
             # Listas para adicionar os dados
             valores = []
             resultado = []
@@ -18,7 +18,7 @@ class Trans_MM():
                             FROM ( \
                                 SELECT DISTINCT codigo_sec \
                                 FROM mensagens \
-                                WHERE codigo_sec IN (1243, 1245, 1244, 1247, 1246, 1222, 1221, 1226, 1227, 1228, 1229, 1230, 1231, 1232) \
+                                WHERE codigo_sec IN (1243, 1245, 1244, 1247, 1246, 1222, 1221, 1226, 1227, 1228, 1229, 1230, 1252, 1256, 1253, 1254, 1255, 1231, 1232) \
                             ) c \
                             LEFT JOIN mensagens m \
                                 ON c.codigo_sec = m.codigo_sec \
@@ -38,8 +38,13 @@ class Trans_MM():
                                 WHEN 1228 THEN 10 \
                                 WHEN 1229 THEN 11 \
                                 WHEN 1230 THEN 12 \
-                                WHEN 1231 THEN 13 \
-                                WHEN 1232 THEN 14 \
+                                WHEN 1252 THEN 13 \
+                                WHEN 1256 THEN 14 \
+                                WHEN 1253 THEN 15 \
+                                WHEN 1254 THEN 16 \
+                                WHEN 1255 THEN 17 \
+                                WHEN 1231 THEN 18 \
+                                WHEN 1232 THEN 19 \
                                 END, DAY(m.hora_transmissao);"
             cursor.execute(consulta_sql, (data1, data2))
             # Extrai o valor da contagem dos dados de retorno
