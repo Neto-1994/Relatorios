@@ -15,7 +15,7 @@ class Disp_MM():
                             FROM ( \
                                 SELECT DISTINCT Codigo_Sec \
                                 FROM medicoes \
-                                WHERE Codigo_Sec IN (1243, 1245, 1244, 1247, 1246, 1222, 1221, 1226, 1227, 1228, 1229, 1230, 1252, 1256, 1253, 1254, 1255, 1231, 1232) \
+                                WHERE Codigo_Sec IN (1243, 1222, 1226, 1227, 1228, 1229, 1230, 1252, 1256, 1253, 1254, 1255, 1231, 1232) \
                             ) c \
                             LEFT JOIN medicoes m \
                                 ON c.Codigo_Sec = m.Codigo_Sec \
@@ -23,24 +23,19 @@ class Disp_MM():
                             GROUP BY c.Codigo_Sec \
                             ORDER BY CASE c.Codigo_Sec \
                                 WHEN 1243 THEN 1 \
-                                WHEN 1245 THEN 2 \
-                                WHEN 1244 THEN 3 \
-                                WHEN 1247 THEN 4 \
-                                WHEN 1246 THEN 5 \
-                                WHEN 1222 THEN 6 \
-                                WHEN 1221 THEN 7 \
-                                WHEN 1226 THEN 8 \
-                                WHEN 1227 THEN 9 \
-                                WHEN 1228 THEN 10 \
-                                WHEN 1229 THEN 11 \
-                                WHEN 1230 THEN 12 \
-                                WHEN 1252 THEN 13 \
-                                WHEN 1256 THEN 14 \
-                                WHEN 1253 THEN 15 \
-                                WHEN 1254 THEN 16 \
-                                WHEN 1255 THEN 17 \
-                                WHEN 1231 THEN 18 \
-                                WHEN 1232 THEN 19 \
+                                WHEN 1222 THEN 2 \
+                                WHEN 1226 THEN 3 \
+                                WHEN 1227 THEN 4 \
+                                WHEN 1228 THEN 5 \
+                                WHEN 1229 THEN 6 \
+                                WHEN 1230 THEN 7 \
+                                WHEN 1252 THEN 8 \
+                                WHEN 1256 THEN 9 \
+                                WHEN 1253 THEN 10 \
+                                WHEN 1254 THEN 11 \
+                                WHEN 1255 THEN 12 \
+                                WHEN 1231 THEN 13 \
+                                WHEN 1232 THEN 14 \
                                 END;"
             cursor.execute(consulta_sql, (data1, data2))
             # Extrai o valor da contagem dos dados de retorno
