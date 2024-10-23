@@ -1,4 +1,15 @@
 #Arquivos ignorados
+__pycache__/
+models/MARACA/__pycache__/
+models/PHJG/__pycache__/
+models/PHRO/__pycache__/
+models/SAE/__pycache__/
+models/UHCB/__pycache__/
+models/UHET/__pycache__/
+models/UHJA/__pycache__/
+models/UHMI/__pycache__/
+models/UHPP/__pycache__/
+models/UHSA/__pycache__/
 .env
 .venv
 
